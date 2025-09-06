@@ -1,0 +1,12 @@
+[directories]
+photos = "photos"
+output = "output"
+templates = "templates"
+
+[theme]
+title = "donut-planet"
+
+[server]
+port = 3000
+domain = "127.0.0.1"
+root_path = "/~donut-planet"
