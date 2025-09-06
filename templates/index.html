@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{{ title }}</title>
+        <script src="/~cardamon/index.js"></script>
+        <style>
+            * {
+                box-sizing: border-box;
+                border: 0;
+                padding: 0;
+                margin: 0;
+                font-family: monospace;
+            }
+            html {
+                font-size: 16px;
+            }
+            .flex {
+                display: flex;
+            }
+            .flex-col {
+                flex-direction: column;
+            }
+        </style>
+    </head>
+    <body>
+        <main class="flex flex-col">
+            <ul>
+                {%- for image in data.images -%}
+                <li>{{image.file_name}}</li>
+                {%- endfor -%}
+            </ul>
+        </main>
+    </body>
+</html>
