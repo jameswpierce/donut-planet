@@ -1,6 +1,5 @@
 use serde::Deserialize;
 use std::fs::read_to_string;
-use toml;
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
@@ -18,7 +17,7 @@ pub struct Server {
 
 #[derive(Debug, Deserialize)]
 pub struct Directories {
-    pub photos: String,
+    pub images: String,
     pub output: String,
     pub templates: String,
 }

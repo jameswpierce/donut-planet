@@ -1,5 +1,5 @@
 [directories]
-photos = "photos"
+images = "images"
 output = "output"
 templates = "templates"
 
