@@ -1,6 +1,9 @@
 use crate::config::load_config;
+use axum::Router;
+use tower_http::services::ServeDir;
 
-pub fn run(dev_mode: bool) -> Result<(), Box<dyn std::error::Error>> {
+#[tokio::main]
+pub async fn run(dev_mode: bool) -> Result<(), Box<dyn std::error::Error>> {
     let config = load_config()?;
     if dev_mode {
         println!("starting donut planet server in dev mode...");
@@ -8,9 +11,20 @@ pub fn run(dev_mode: bool) -> Result<(), Box<dyn std::error::Error>> {
             "{}:{}{}",
             config.server.domain, config.server.port, config.server.root_path
         );
-        Ok(())
     } else {
         println!("starting donut planet server...");
-        Ok(())
     }
+    let app = Router::new().nest_service(
+        &config.server.root_path,
+        ServeDir::new(&config.directories.output),
+    );
+    let addr = format!("{}:{}", &config.server.domain, &config.server.port);
+    println!(
+        "Server running on http://{}{}",
+        addr, &config.server.root_path
+    );
+    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
+
+    axum::serve(listener, app).await.unwrap();
+    Ok(())
 }
