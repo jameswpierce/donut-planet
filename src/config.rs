@@ -1,5 +1,6 @@
 use serde::Deserialize;
 use std::fs::read_to_string;
+use std::path::PathBuf;
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
@@ -17,9 +18,9 @@ pub struct Server {
 
 #[derive(Debug, Deserialize)]
 pub struct Directories {
-    pub images: String,
-    pub output: String,
-    pub templates: String,
+    pub images: PathBuf,
+    pub output: PathBuf,
+    pub templates: PathBuf,
 }
 
 #[derive(Debug, Deserialize)]
