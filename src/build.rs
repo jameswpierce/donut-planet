@@ -2,7 +2,7 @@ use crate::config::load_config;
 use serde::Serialize;
 use std::fs;
 use std::path::Path;
-use walkdir::{DirEntry, WalkDir};
+use walkdir::WalkDir;
 
 #[derive(Serialize)]
 struct IndexData {
@@ -11,6 +11,7 @@ struct IndexData {
 
 #[derive(Serialize)]
 struct Image {
+    path: String,
     file_name: String,
 }
 
@@ -22,14 +23,14 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
     let mut images = Vec::new();
 
     for entry in WalkDir::new(images_path).into_iter().filter_map(|e| e.ok()) {
-        println!("{:?}", entry);
+        println!("{entry:?}");
         if entry.path().is_dir() {
-            handle_directory(&entry)?;
+            println!("directory =^w^=");
         } else {
             images.push(Image {
+                path: entry.path().as_os_str().to_string_lossy().to_string(),
                 file_name: entry.file_name().to_string_lossy().to_string(),
             });
-            // handle_file(&entry)?;
         }
     }
 
@@ -46,13 +47,5 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
         .unwrap();
     fs::write(output_path.join("index.html"), index_html_rendered)?;
 
-    Ok(())
-}
-
-fn handle_directory(entry: &DirEntry) -> Result<(), Box<dyn std::error::Error>> {
-    Ok(())
-}
-
-fn handle_file(entry: &DirEntry) -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
