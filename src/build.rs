@@ -24,7 +24,7 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
 
     for entry in WalkDir::new(&config.directories.images)
         .into_iter()
-        .filter_map(|e| e.ok())
+        .filter_map(std::result::Result::ok)
     {
         println!("{entry:?}");
         if entry.path().is_dir() {
