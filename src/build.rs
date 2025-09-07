@@ -52,10 +52,11 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
             title => &config.theme.title,
             root_path => &config.server.root_path,
             data => IndexData { images },
+            config => &config,
         })
         .unwrap();
     fs::write(
-        config.directories.output.join("index.html"),
+        &config.directories.output.join("index.html"),
         index_html_rendered,
     )?;
 

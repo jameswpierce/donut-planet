@@ -26,11 +26,15 @@
     </head>
     <body>
         <main class="flex flex-col">
-            <ul>
-                y {%- for image in data.images -%}
-                <li>{{image.file_name}} {{image.path}} {{image.extension}}</li>
-                {%- endfor -%}
-            </ul>
+            {%- for image in data.images -%}
+            <div>
+                <img
+                    src="{{ config.server.root_path }}/{{ image.path }}"
+                    loading="lazy"
+                />
+            </div>
+
+            {%- endfor -%}
         </main>
     </body>
 </html>

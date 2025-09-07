@@ -1,29 +1,30 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::fs::read_to_string;
 use std::path::PathBuf;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Config {
     pub directories: Directories,
     pub theme: Theme,
     pub server: Server,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Server {
     pub domain: String,
     pub port: usize,
     pub root_path: String,
+    pub images_path: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Directories {
     pub images: PathBuf,
     pub output: PathBuf,
     pub templates: PathBuf,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Theme {
     pub title: String,
 }

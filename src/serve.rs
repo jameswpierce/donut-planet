@@ -11,14 +11,20 @@ pub async fn run(dev_mode: bool) -> Result<(), Box<dyn std::error::Error>> {
             "{}:{}{}",
             config.server.domain, config.server.port, config.server.root_path
         );
-    } else {
-        println!("starting donut planet server...");
     }
-    let app = Router::new().nest_service(
-        &config.server.root_path,
-        ServeDir::new(&config.directories.output),
-    );
+
+    let app = Router::new()
+        .nest_service(
+            &config.server.root_path,
+            ServeDir::new(&config.directories.output),
+        )
+        .nest_service(
+            &config.server.images_path,
+            ServeDir::new(&config.directories.images),
+        );
+
     let addr = format!("{}:{}", &config.server.domain, &config.server.port);
+
     println!(
         "Server running on http://{}{}",
         addr, &config.server.root_path
