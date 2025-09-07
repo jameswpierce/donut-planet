@@ -13,6 +13,7 @@ struct IndexData {
 struct Image {
     path: String,
     file_name: String,
+    extension: String,
 }
 
 pub fn run() -> Result<(), Box<dyn std::error::Error>> {
@@ -30,6 +31,12 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
             images.push(Image {
                 path: entry.path().as_os_str().to_string_lossy().to_string(),
                 file_name: entry.file_name().to_string_lossy().to_string(),
+                extension: entry
+                    .path()
+                    .extension()
+                    .and_then(|ext| ext.to_str())
+                    .unwrap_or_default()
+                    .to_string(),
             });
         }
     }

@@ -27,8 +27,8 @@
     <body>
         <main class="flex flex-col">
             <ul>
-                {%- for image in data.images -%}
-                <li>{{image.file_name}}</li>
+                y {%- for image in data.images -%}
+                <li>{{image.file_name}} {{image.path}} {{image.extension}}</li>
                 {%- endfor -%}
             </ul>
         </main>
