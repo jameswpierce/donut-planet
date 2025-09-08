@@ -31,7 +31,14 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
             println!("directory =^w^=");
         } else {
             images.push(Image {
-                path: entry.path().as_os_str().to_string_lossy().to_string(),
+                path: entry
+                    .path()
+                    .as_os_str()
+                    .to_string_lossy()
+                    .to_string()
+                    .strip_prefix(&config.directories.images.as_os_str().to_str().unwrap_or(""))
+                    .unwrap_or("")
+                    .to_string(),
                 file_name: entry.file_name().to_string_lossy().to_string(),
                 extension: entry
                     .path()

@@ -29,7 +29,7 @@
             {%- for image in data.images -%}
             <div>
                 <img
-                    src="{{ config.server.root_path }}/{{ image.path }}"
+                    src="{{ config.server.images_path }}{{ image.path }}"
                     loading="lazy"
                 />
             </div>
