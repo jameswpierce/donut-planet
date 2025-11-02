@@ -1,0 +1,8 @@
+services:
+  web:
+    build: .
+    ports:
+      - "81:3000"
+    volumes:
+      - ./images:/app/images
+      - ./config.toml:/app/config.toml
