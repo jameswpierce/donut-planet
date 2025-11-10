@@ -2,3 +2,4 @@
 config.toml
 /images
 /output
+/processed-images

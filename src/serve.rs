@@ -20,7 +20,7 @@ pub async fn run(dev_mode: bool) -> Result<(), Box<dyn std::error::Error>> {
         )
         .nest_service(
             &config.server.images_path,
-            ServeDir::new(&config.directories.images),
+            ServeDir::new(&config.directories.processed_images),
         );
 
     let addr = format!("{}:{}", &config.server.domain, &config.server.port);

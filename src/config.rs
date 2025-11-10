@@ -20,6 +20,7 @@ pub struct Server {
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Directories {
     pub images: PathBuf,
+    pub processed_images: PathBuf,
     pub output: PathBuf,
     pub templates: PathBuf,
 }
