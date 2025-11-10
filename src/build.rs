@@ -1,6 +1,7 @@
 use crate::config::load_config;
 use serde::Serialize;
 use std::fs;
+use std::path::Path;
 use walkdir::WalkDir;
 
 #[derive(Serialize)]
@@ -10,42 +11,57 @@ struct IndexData {
 
 #[derive(Serialize)]
 struct Image {
-    path: String,
-    file_name: String,
-    extension: String,
+    resized_src: String,
+    original_src: String,
 }
 
 pub fn run() -> Result<(), Box<dyn std::error::Error>> {
     let config = load_config()?;
-
     let mut env = minijinja::Environment::new();
-
     let mut images = Vec::new();
 
     for entry in WalkDir::new(&config.directories.images)
         .into_iter()
-        .filter_map(std::result::Result::ok)
+        .filter_map(Result::ok)
     {
-        println!("{entry:?}");
+        let extension = entry
+            .path()
+            .extension()
+            .and_then(|ext| ext.to_str())
+            .unwrap_or_default()
+            .to_lowercase();
         if entry.path().is_dir() {
             println!("directory =^w^=");
-        } else {
+        } else if ["jpg".to_string(), "gif".to_string()].contains(&extension) {
+            let original_file_name = entry
+                .path()
+                .file_name()
+                .unwrap()
+                .to_string_lossy()
+                .to_string();
+            let resized_file_name = format!("800x{original_file_name}");
+            let resized_file_directory = Path::new("processed-images/");
+            if !resized_file_directory.exists() {
+                fs::create_dir(&resized_file_directory)?;
+            }
+            let original_file_path = resized_file_directory.join(&original_file_name);
+            let resized_file_path = resized_file_directory.join(&resized_file_name);
+            if !resized_file_path.exists() {
+                println!("resizing {original_file_name}");
+                dbg!(&resized_file_path);
+
+                let image = image::open(&entry.path()).unwrap();
+                let ratio: f32 = 800.0 / image.width() as f32;
+                let scaled_height = (image.height() as f32 * ratio) as u32;
+                image.save(&original_file_path)?;
+                image
+                    .resize(800, scaled_height, image::imageops::FilterType::Triangle)
+                    .save(&resized_file_path)?;
+            }
+
             images.push(Image {
-                path: entry
-                    .path()
-                    .as_os_str()
-                    .to_string_lossy()
-                    .to_string()
-                    .strip_prefix(&config.directories.images.as_os_str().to_str().unwrap_or(""))
-                    .unwrap_or("")
-                    .to_string(),
-                file_name: entry.file_name().to_string_lossy().to_string(),
-                extension: entry
-                    .path()
-                    .extension()
-                    .and_then(|ext| ext.to_str())
-                    .unwrap_or_default()
-                    .to_string(),
+                resized_src: resized_file_name,
+                original_src: original_file_name,
             });
         }
     }

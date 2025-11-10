@@ -31,10 +31,12 @@
         <main class="flex flex-col">
             {%- for image in data.images -%}
             <div>
-                <img
-                    src="{{ config.server.images_path }}{{ image.path }}"
-                    loading="lazy"
-                />
+                <a href="{{config.server.images_path}}/{{image.original_src}}">
+                    <img
+                        src="{{ config.server.images_path }}/{{ image.resized_src }}"
+                        loading="lazy"
+                    />
+                </a>
             </div>
 
             {%- endfor -%}
