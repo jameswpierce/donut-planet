@@ -1,4 +1,5 @@
 use crate::config::load_config;
+use globset::{Glob, GlobSetBuilder};
 use serde::Serialize;
 use std::fs;
 use std::path::Path;
@@ -19,6 +20,13 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
     let config = load_config()?;
     let mut env = minijinja::Environment::new();
     let mut images = Vec::new();
+    let mut builder = GlobSetBuilder::new();
+
+    for ignored_file in &config.directories.ignored_files {
+        builder.add(Glob::new(ignored_file.as_str())?);
+    }
+
+    let globset = builder.build()?;
 
     for entry in WalkDir::new(&config.directories.images)
         .into_iter()
@@ -32,6 +40,8 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
             .to_lowercase();
         if entry.path().is_dir() {
             println!("directory =^w^=");
+        } else if globset.is_match(entry.path()) {
+            println!("skipping");
         } else if ["jpg".to_string(), "gif".to_string()].contains(&extension) {
             let original_file_name = entry
                 .path()
