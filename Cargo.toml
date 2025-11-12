@@ -6,6 +6,7 @@ edition = "2024"
 [dependencies]
 axum = "0.8.4"
 clap = { version = "4.5.47", features = ["derive"] }
+globset = "0.4.18"
 image = "0.25.8"
 minijinja = { version = "2.12.0", features = ["loader"] }
 serde = { version = "1.0.219", features = ["derive"] }

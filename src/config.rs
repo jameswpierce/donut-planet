@@ -23,6 +23,7 @@ pub struct Directories {
     pub processed_images: PathBuf,
     pub output: PathBuf,
     pub templates: PathBuf,
+    pub ignored_files: Vec<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
